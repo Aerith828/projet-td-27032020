@@ -14,6 +14,8 @@ app.listen(3000, () => {
 app.use(express.static("./public"));
 app.use(express.urlencoded({ extended: true }));
 
+// SECTION ARTICLES
+
 app.get("/api/articles", (req, res) => {
     const sqlConnection = mysql.createConnection(sqlConfig);
 
@@ -56,7 +58,7 @@ app.route("/api/articles/delete")
 
         sqlConnection.query(
             "DELETE FROM node_articles WHERE id = ?",
-            [ req.body.id_article ],
+            [ req.body.id ],
             (error, result) => {
                 if (error) {
                     console.log("ERROR :", error.code);
@@ -68,6 +70,8 @@ app.route("/api/articles/delete")
                 sqlConnection.end();
             });
     });
+
+// SECTION COMMENTS
 
 app.get("/api/comments", (req, res) => {
     const sqlConnection = mysql.createConnection(sqlConfig);
@@ -111,7 +115,7 @@ app.route("/api/comments/delete")
 
         sqlConnection.query(
             "DELETE FROM node_comments WHERE id = ?",
-            [ req.body.id_comment ],
+            [ req.body.id ],
             (error, result) => {
                 if (error) {
                     console.log("ERROR :", error.code);
