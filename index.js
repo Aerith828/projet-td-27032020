@@ -17,12 +17,12 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/api/articles", (req, res) => {
     const sqlConnection = mysql.createConnection(sqlConfig);
 
-    sqlConnection.query("SELECT id, title, content, author, created_at FROM node_articles WHERE id < 6 LIMIT 5", (error, result) => {
+    sqlConnection.query("SELECT id, title, content, author, created_at FROM node_articles WHERE id < 7 LIMIT 5", (error, result) => {
         if (error) {
             console.log("ERROR :", error.code);
         } else {
-            res.send(result[0]);
-            console.log(result[0]);
+            res.send(result);
+            console.log(result);
         }
         sqlConnection.end();
     });
