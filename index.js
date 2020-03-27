@@ -19,12 +19,11 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/api/articles", (req, res) => {
     const sqlConnection = mysql.createConnection(sqlConfig);
 
-    sqlConnection.query("SELECT SELECT id, title, content, author, created_at FROM node_articles ORDER BY id DESC LIMIT 5", (error, result) => {
+    sqlConnection.query("SELECT id, title, content, author, created_at FROM node_articles ORDER BY id DESC LIMIT 5", (error, result) => {
         if (error) {
             console.log("ERROR :", error.code);
         } else {
             res.send(result);
-            console.log(result);
         }
         sqlConnection.end();
     });
@@ -52,7 +51,7 @@ app.route("/api/articles/create")
     });
 
 app.route("/api/articles/delete")
-    .get((req, res) => res.status(503).send({ status: "ERROR"}))
+    .get((req, res) => res.status(503).send({ status: "ERROR" }))
     .post((req, res) => {
         const sqlConnection = mysql.createConnection(sqlConfig);
 
@@ -76,7 +75,7 @@ app.route("/api/articles/delete")
 app.get("/api/comments", (req, res) => {
     const sqlConnection = mysql.createConnection(sqlConfig);
     
-    sqlConnection.query("SELECT id, article_id, content, author, created_at FROM node_articles ORDER BY id DESC LIMIT 5", (error, result) => {
+    sqlConnection.query("SELECT id, article_id, content, author, created_at FROM node_comments ORDER BY id DESC LIMIT 5", (error, result) => {
         if (error) {
             console.log("ERROR :", error.code);
         } else {
@@ -109,7 +108,7 @@ app.route("/api/comments/create")
     });
 
 app.route("/api/comments/delete")
-    .get((req, res) => res.status(503).send({ status: "ERROR"}))
+    .get((req, res) => res.status(503).send({ status: "ERROR" }))
     .post((req, res) => {
         const sqlConnection = mysql.createConnection(sqlConfig);
 
