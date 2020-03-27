@@ -4,7 +4,8 @@ CREATE TABLE node_articles (
     title VARCHAR(128) NOT NULL,
     content VARCHAR(256) NOT NULL,
     author INT NOT NULL,
-    created_at DATETIME NOT NULL
+    created_at DATETIME NOT NULL,
+    FOREIGN KEY (author) REFERENCES node_users(id)
 );
 
 /*! Création de la table node_comments */
@@ -14,5 +15,6 @@ CREATE TABLE node_comments (
     content VARCHAR(256),
     author INT NOT NULL,
     created_at DATETIME,
-    FOREIGN KEY (article_id) REFERENCES node_articles(id)
+    FOREIGN KEY (article_id) REFERENCES node_articles(id),
+    FOREIGN KEY (author) REFERENCES node_users(id)
 );

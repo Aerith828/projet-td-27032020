@@ -7,7 +7,7 @@
     - [X]Articles
         - [X] id
         - [X] title
-        - [X]content
+        - [X] content
         - [X] author (INT)
         - [X] created_at (DATETIME)
     - [X] Comments
