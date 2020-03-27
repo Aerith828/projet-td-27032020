@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Exercice 27/03/20 - Création d'un commentaire</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+    <form action="/api/comments/create" method="POST">
+        <fieldset>
+            <legend>Test pour la création d'un commentaire</legend>
+
+            <input type="text" name="article_id" placeholder="Commentaire sous l'article: " />
+            <input type="text" name="content" placeholder="Contenu du commentaire: "/>
+            <input type="text" name="author" placeholder="ID de l'auteur du commentaire:"/>
+            <input type="datetime-local" name="created_at" placeholder="Date de publication"/>
+            <button type="submit">Créer un commentaire</button>
+        </fieldset>
+    </form>
+</body>
+
+</html>

@@ -68,3 +68,58 @@ app.route("/api/articles/delete")
                 sqlConnection.end();
             });
     });
+
+app.get("/api/comments", (req, res) => {
+    const sqlConnection = mysql.createConnection(sqlConfig);
+    
+    sqlConnection.query("SELECT id, article_id, content, author, created_at FROM node_comments WHERE id < 7 LIMIT 5", (error, result) => {
+        if (error) {
+            console.log("ERROR :", error.code);
+        } else {
+            res.send(result);
+            console.log(result);
+        }
+        sqlConnection.end();
+    });
+});
+
+app.route("/api/comments/create")
+    .get((req, res) => res.status(503).send({ status: "ERROR" }))
+    .post((req,res) => {
+        console.log(req.body);
+
+        const sqlConnection = mysql.createConnection(sqlConfig);
+
+        sqlConnection.query(
+            "INSERT INTO node_comments VALUES (NULL, ?, ?, ?, ?)", 
+            [req.body.article_id, req.body.content, req.body.author, req.body.created_at],(error, result) => {
+                if (error) {
+                    console.log("ERROR :", error.code);
+                    res.status(503).send({ status: "ERROR" });
+                } else {
+                    console.log(result);
+                    res.send({ status : "OK" });
+                }
+                sqlConnection.end();
+            });
+    });
+
+app.route("/api/comments/delete")
+    .get((req, res) => res.status(503).send({ status: "ERROR"}))
+    .post((req, res) => {
+        const sqlConnection = mysql.createConnection(sqlConfig);
+
+        sqlConnection.query(
+            "DELETE FROM node_comments WHERE id = ?",
+            [ req.body.id ],
+            (error, result) => {
+                if (error) {
+                    console.log("ERROR :", error.code);
+                    res.status(503).send({ status: "ERROR" });
+                } else {
+                    console.log(result);
+                    res.send({ status : "OK" });
+                }
+                sqlConnection.end();
+            });
+    });

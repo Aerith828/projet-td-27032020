@@ -23,10 +23,10 @@
     - [ ] Route '/api/comments/create' -> permet de créer un commentaire
     - [ ] Route '/api/comments/delete' -> permet de supprimer un commentaire par son id
     - [ ] Route '/api/comments' -> permet de récuperer les 5 derniers commentaires postés
-- [ ] Création de formulaires HTML pour tout tester
-    - [ ] Articles
-        - [ ] create.html
-        - [ ] delete.html
-    - [ ] Comments
-        - [ ] create.html
-        - [ ] delete.html
+- [X] Création de formulaires HTML pour tout tester
+    - [X] Articles
+        - [X] create.html
+        - [X] delete.html
+    - [X] Comments
+        - [X] create.html
+        - [X] delete.html
