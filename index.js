@@ -56,7 +56,7 @@ app.route("/api/articles/delete")
 
         sqlConnection.query(
             "DELETE FROM node_articles WHERE id = ?",
-            [ req.body.id ],
+            [ req.body.id_article ],
             (error, result) => {
                 if (error) {
                     console.log("ERROR :", error.code);
@@ -111,7 +111,7 @@ app.route("/api/comments/delete")
 
         sqlConnection.query(
             "DELETE FROM node_comments WHERE id = ?",
-            [ req.body.id ],
+            [ req.body.id_comment ],
             (error, result) => {
                 if (error) {
                     console.log("ERROR :", error.code);
