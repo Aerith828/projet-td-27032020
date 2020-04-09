@@ -6,7 +6,7 @@ app.route("/api/comments/create")
     .get((req, res) => res.status(503).send({ status: "ERROR"}))
     .post((req, res) => {
 
-        if (typeof req.body.articles_id !== "string" ||req.body.articles_id === "") {
+        if (typeof req.body.article_id !== "string" ||req.body.article_id === "") {
             res.status(503).send({status: "ERROR", extra: "Vous devez renseigner l'ID de l'article"});
             return;
         }
@@ -23,11 +23,12 @@ app.route("/api/comments/create")
         const sqlConnection = mysql.createConnection(sqlConfig);
 
         sqlConnection.query(
-            "INSERT INTO node_comments(articles_id, author, content) VALUES (?,?,?);",
-            [req.body.articles_id, req.body.author, req.body.content],
+            "INSERT INTO node_comments(article_id, author, content) VALUES (?,?,?);",
+            [req.body.article_id, req.body.author, req.body.content],
             (error, result) => {
                 if (error) {
-                    res.status(503).send({ status: "ERROR" });
+                    console.log(error);
+                    res.status(503).send({ status: "ERROR", extra: "Erreur avec SQL" });
                 } else {
                     console.log(result);
                     res.send({ status: "OK" });
@@ -67,11 +68,11 @@ app.get("/api/comments", (req, res) => {
     const sqlConnection = mysql.createConnection(sqlConfig);
 
     sqlConnection.query(
-        "SELECT articles_id, content, node_users.firstname AS authorFirstname, node_users.lastname AS authorLastname, created_at"
+        "SELECT article_id, content, node_users.firstname AS authorFirstname, node_users.lastname AS authorLastname, created_at"
         + "  FROM node_comments"
         + "  LEFT JOIN node_users"
         + "  ON node_comments.author = node_users.id"
-        + "  WHERE articles_id = ?"
+        + "  WHERE article_id = ?"
         + "  ORDER BY created_at DESC"
         + "  LIMIT 5;",
         [ req.query.articles_id ],
@@ -109,7 +110,7 @@ app.get("/api/comment", (req, res) => {
                 console.log(result);
                 res.send({
                     status: "OK",
-                    comment: result[0],
+                    article: result[0],
                 });
             }
             sqlConnection.end();
