@@ -5,6 +5,21 @@ const app       = require("../app.js");
 app.route("/api/comments/create")
     .get((req, res) => res.status(503).send({ status: "ERROR"}))
     .post((req, res) => {
+
+        if (typeof req.body.articles_id !== "string" ||req.body.articles_id === "") {
+            res.status(503).send({status: "ERROR", extra: "Vous devez renseigner l'ID de l'article"});
+            return;
+        }
+        if (typeof req.body.author !== "string" ||req.body.author === "") {
+            res.status(503).send({status: "ERROR", extra: "L'auteur n'est pas renseigné"});
+            return;
+        }
+        if (typeof req.body.content !== "string" ||req.body.content === "") {
+            res.status(503).send({status: "ERROR", extra: "Le contenu du commentaire est vide"});
+            return;
+        }
+        
+
         const sqlConnection = mysql.createConnection(sqlConfig);
 
         sqlConnection.query(
@@ -25,6 +40,12 @@ app.route("/api/comments/create")
 app.route("/api/comments/delete")
     .get((req, res) => res.status(503).send({ status: "ERROR"}))
     .post((req, res) => {
+
+        if (typeof req.body.id !== "string" || req.body.id ==="") {
+            res.status(503).send({ status: "ERROR", extra: "Vous devez renseigner l'ID du commentaire"});
+            return;
+        }
+
         const sqlConnection = mysql.createConnection(sqlConfig);
 
         sqlConnection.query(
@@ -63,6 +84,32 @@ app.get("/api/comments", (req, res) => {
                 res.send({
                     status: "OK",
                     comments: result,
+                });
+            }
+            sqlConnection.end();
+        }
+    );
+});
+
+app.get("/api/comment", (req, res) => {
+    const sqlConnection = mysql.createConnection(sqlConfig);
+    sqlConnection.query(
+        "SELECT article_id, content, node_users.firstname AS authorFirstname, node_users.lastname AS authorLastname, created_at"
+        + "  FROM node_comments"
+        + "  LEFT JOIN node_users"
+        + "  ON node_comments.author = node_users.id"
+        + "  WHERE article_id = ?"
+        + "  ORDER BY created_at DESC"
+        + "  LIMIT 1;",
+        [req.query.id],
+        (error, result) => {
+            if (error) {
+                res.status(503).send({ status: "ERROR" });
+            } else {
+                console.log(result);
+                res.send({
+                    status: "OK",
+                    comment: result[0],
                 });
             }
             sqlConnection.end();
