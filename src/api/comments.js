@@ -44,7 +44,7 @@ app.route("/api/comments/delete")
     .get((req, res) => res.status(503).send({ status: "ERROR"}))
     .post((req, res) => {
 
-        if (typeof req.body.id !== "string" || req.body.id ==="") {
+        if (typeof req.body.id !== "number" || req.body.id <= 0 ) {
             res.status(503).send({ status: "ERROR", extra: "Vous devez renseigner l'ID du commentaire"});
             return;
         }
