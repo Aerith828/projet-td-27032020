@@ -34,11 +34,24 @@ app.route("/api/login")
 
                     // GOOD USER
                     const userToken = uuid();
-                    res.send({ status: "OK", infos: {
-                        user:result[0],
-                        userToken,
-                    }});
-                }
+                    const user = result[0];
+
+                    sqlConnection.query(
+                        "UPDATE node_users SET token = ? WHERE id = ?;",
+                        [ userToken, user.id],
+                        (error) => {
+                            if (error) {
+                                console.log(error.code);
+                                res.status(503).send({ status: "ERROR" });
+                            } else {
+                                res.send({ status: "OK", infos: {
+                                    user,
+                                    userToken,
+                                }});
+                            }
+                        }
+                    );
+                }        
                 sqlConnection.end();
             }
         );
