@@ -1,4 +1,5 @@
 const mysql     = require("mysql");
+const uuid = require("uuid").v4;
 const sqlConfig = require("../../settings.json").sqlConfig;
 const app       = require("../app.js");
 
@@ -18,7 +19,7 @@ app.route("/api/login")
         const sqlConnection = mysql.createConnection(sqlConfig);
 
         sqlConnection.query(
-            "SELECT id, firstname, lastname, email FROM node_users WHERE email = ? AND password = ? ;",
+            "SELECT id, firstname, lastname, email FROM node_users WHERE email = ? AND password = ? LIMIT 1 ;",
             [ req.body.email, req.body.password ],
             (error, result) => {
                 if (error) {
@@ -26,7 +27,17 @@ app.route("/api/login")
                     res.status(503).send({ status: "ERROR", extra: "Erreur avec SQL" });
                 } else {
                     console.log(result);
-                    res.send({ status: "OK" });
+                    if (!result.length) {
+                        res.status(503).send({ status: "ERROR", extra: "Email ou mot de passe incorrect"});
+                        return;
+                    }
+
+                    // GOOD USER
+                    const userToken = uuid();
+                    res.send({ status: "OK", infos: {
+                        user:result[0],
+                        userToken,
+                    }});
                 }
                 sqlConnection.end();
             }

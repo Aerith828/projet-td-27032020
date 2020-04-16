@@ -13,7 +13,7 @@ app.route("/api/articles/create")
             res.status(503).send({status: "ERROR", extra: "Le contenu de l'article est vide"});
             return;
         }
-        if (typeof req.body.author !== "string" ||req.body.author === "") {
+        if (typeof req.body.author !== "number" ||req.body.author <= 0) {
             res.status(503).send({status: "ERROR", extra: "L'auteur n'est pas renseigné"});
             return;
         }
@@ -67,7 +67,7 @@ app.route("/api/articles/delete")
 app.get("/api/articles", (req, res) => {
     const sqlConnection = mysql.createConnection(sqlConfig);
     sqlConnection.query(
-        "SELECT node_articles.id, title, content, node_users.firstname AS authorFirstname, node_users.lastname AS authorLastname, created_at"
+        "SELECT node_articles.id, title, content, node_users.id AS authorId, node_users.firstname AS authorFirstname, node_users.lastname AS authorLastname, created_at"
         + "  FROM node_articles"
         + "  LEFT JOIN node_users"
         + "  ON node_articles.author = node_users.id"
@@ -91,7 +91,7 @@ app.get("/api/articles", (req, res) => {
 app.get("/api/article", (req, res) => {
     const sqlConnection = mysql.createConnection(sqlConfig);
     sqlConnection.query(
-        "SELECT node_articles.id, title, content, node_users.firstname AS authorFirstname, node_users.lastname AS authorLastname, created_at"
+        "SELECT node_articles.id, title, content, node_users.id AS authorId, node_users.firstname AS authorFirstname, node_users.lastname AS authorLastname, created_at"
         + "  FROM node_articles"
         + "  LEFT JOIN node_users"
         + "  ON node_articles.author = node_users.id"

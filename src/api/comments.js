@@ -10,7 +10,7 @@ app.route("/api/comments/create")
             res.status(503).send({status: "ERROR", extra: "Vous devez renseigner l'ID de l'article"});
             return;
         }
-        if (typeof req.body.author !== "string" ||req.body.author === "") {
+        if (typeof req.body.author !== "number" ||req.body.author <= 0) {
             res.status(503).send({status: "ERROR", extra: "L'auteur n'est pas renseigné"});
             return;
         }
@@ -70,7 +70,7 @@ app.get("/api/comments", (req, res) => {
     const sqlConnection = mysql.createConnection(sqlConfig);
 
     sqlConnection.query(
-        "SELECT node_comments.id, article_id, content, node_users.firstname AS authorFirstname, node_users.lastname AS authorLastname, created_at"
+        "SELECT node_comments.id, article_id, content, node_users.id AS authorId, node_users.firstname AS authorFirstname, node_users.lastname AS authorLastname, created_at"
         + "  FROM node_comments"
         + "  LEFT JOIN node_users"
         + "  ON node_comments.author = node_users.id"
